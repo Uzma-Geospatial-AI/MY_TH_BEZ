@@ -105,12 +105,27 @@ body::before{
 .tb-btn.active{color:var(--gold)} .tb-btn.active::after{transform:scaleX(1)}
 .tb-btn:hover:not(.active){color:var(--text)}
 .tb-div{width:1px;background:var(--border);margin:12px 0.4rem}
-.tb-right{margin-left:auto;display:flex;align-items:stretch;border-left:1px solid var(--border)}
+.tb-right{margin-left:auto;display:flex;align-items:stretch;border-left:1px solid var(--border);min-width:0;overflow:hidden}
 .tb-stat{padding:0 1.1rem;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center}
 .tb-sv{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:var(--gold2);line-height:1}
 .tb-sl{font-size:0.52rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-top:3px}
 .tb-live{padding:0 1.1rem;display:flex;align-items:center;gap:7px;font-size:0.61rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal2)}
 .tb-ld{width:7px;height:7px;border-radius:50%;background:var(--teal2);animation:pulse4 2.5s infinite;flex-shrink:0}
+.tb-out{
+  padding:0 1.05rem;display:flex;align-items:center;gap:7px;flex-shrink:0;
+  border:none;border-left:1px solid var(--border);background:none;cursor:pointer;white-space:nowrap;
+  font-family:var(--body);font-size:0.61rem;font-weight:600;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--muted);transition:color 0.25s,background 0.25s;
+}
+.tb-out:hover{color:var(--terr);background:rgba(232,69,10,0.07)}
+.tb-out.arm{color:var(--terr);background:rgba(232,69,10,0.12)}
+.tb-out svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+/* topbar is already dense — collapse to icon-only when space runs short */
+@media (max-width:1650px){
+  .tb-out{padding:0 0.9rem;gap:0}
+  .tb-out span{display:none}
+  .tb-out.arm{gap:7px} .tb-out.arm span{display:inline}
+}
 
 /* ══ SHELL ══ */
 .shell{display:flex;height:100vh;padding-top:60px}
@@ -460,7 +475,24 @@ body::before{
     <div class="tb-stat"><div class="tb-sv">4</div><div class="tb-sl">UNESCO Sites</div></div>
     <div class="tb-live"><div class="tb-ld"></div>Live GIS</div>
   </div>
+  <button class="tb-out" id="btnSignOut" type="button" title="Sign out of the dashboard">
+    <svg viewBox="0 0 24 24"><path d="M15 17l5-5-5-5"/><path d="M20 12H9"/><path d="M9 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3"/></svg>
+    <span id="soLabel">Sign Out</span>
+  </button>
 </div>
+<script>
+/* ══ SIGN OUT — two-step confirm so a stray click can't drop the session ══ */
+(function(){
+  var b=document.getElementById('btnSignOut'),l=document.getElementById('soLabel'),t=null;
+  function disarm(){b.classList.remove('arm');l.textContent='Sign Out';t=null}
+  b.addEventListener('click',function(){
+    if(!t){b.classList.add('arm');l.textContent='Confirm?';t=setTimeout(disarm,3200);return}
+    clearTimeout(t);l.textContent='Signing out…';
+    window.__uzmaSignOut();
+  });
+  b.addEventListener('mouseleave',function(){if(t){clearTimeout(t);disarm()}});
+})();
+</script>
 
 <div class="shell">
   <!-- LEFT PANEL -->
