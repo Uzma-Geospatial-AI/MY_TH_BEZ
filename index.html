@@ -124,7 +124,6 @@ body::before{
 @media (max-width:1650px){
   .tb-out{padding:0 0.9rem;gap:0}
   .tb-out span{display:none}
-  .tb-out.arm{gap:7px} .tb-out.arm span{display:inline}
 }
 
 /* ══ SHELL ══ */
@@ -481,16 +480,13 @@ body::before{
   </button>
 </div>
 <script>
-/* ══ SIGN OUT — two-step confirm so a stray click can't drop the session ══ */
+/* ══ SIGN OUT ══ */
 (function(){
-  var b=document.getElementById('btnSignOut'),l=document.getElementById('soLabel'),t=null;
-  function disarm(){b.classList.remove('arm');l.textContent='Sign Out';t=null}
+  var b=document.getElementById('btnSignOut'),l=document.getElementById('soLabel');
   b.addEventListener('click',function(){
-    if(!t){b.classList.add('arm');l.textContent='Confirm?';t=setTimeout(disarm,3200);return}
-    clearTimeout(t);l.textContent='Signing out…';
+    b.disabled=true; b.classList.add('arm'); l.textContent='Signing out…';
     window.__uzmaSignOut();
   });
-  b.addEventListener('mouseleave',function(){if(t){clearTimeout(t);disarm()}});
 })();
 </script>
 
