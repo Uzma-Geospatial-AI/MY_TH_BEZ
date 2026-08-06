@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Sign In · Geospatial AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1B2B4A; --navy-2:#16233D; --navy-3:#101B2F;
+  --orange:#F26A1B; --orange-2:#E85A0A; --orange-soft:#FDEEE3;
+  --ink:#16233D; --muted:#6B7688; --muted-2:#98A1B0;
+  --line:#DCE0E7; --line-2:#EBEDF1; --bg:#F1F2F5; --white:#FFF;
+  --serif:'Playfair Display',Georgia,serif;
+  --body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--body);color:var(--ink);background:var(--bg);
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+a{color:var(--orange);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ══ SHELL ══ */
+.shell{display:grid;grid-template-columns:1.32fr 1fr;min-height:100vh}
+
+/* ══ LEFT / BRAND ══ */
+.brand{
+  position:relative;overflow:hidden;padding:34px 40px 44px;
+  background:radial-gradient(120% 90% at 18% 12%,#22345A 0%,var(--navy) 42%,var(--navy-3) 100%);
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.brand::before{ /* grid lines */
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.045) 0 1px,transparent 1px 82px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.045) 0 1px,transparent 1px 82px);
+  mask-image:radial-gradient(120% 100% at 40% 40%,#000 35%,transparent 92%);
+  -webkit-mask-image:radial-gradient(120% 100% at 40% 40%,#000 35%,transparent 92%);
+}
+.globe{
+  position:absolute;top:40%;left:53%;transform:translate(-50%,-50%);
+  width:min(68vh,565px);aspect-ratio:1;pointer-events:none;opacity:.88;
+}
+.globe svg{width:100%;height:100%;display:block}
+@keyframes orbit{to{transform:rotate(360deg)}}
+.orbit-spin{transform-origin:300px 300px;animation:orbit 90s linear infinite}
+@media (prefers-reduced-motion:reduce){.orbit-spin{animation:none}}
+
+.logo-card{
+  position:relative;z-index:2;align-self:flex-start;
+  background:#fff;border-radius:12px;padding:14px 22px;
+  box-shadow:0 10px 30px rgba(0,0,0,.22);
+}
+.logo-mark{
+  font-family:var(--serif);font-size:21px;letter-spacing:.055em;
+  color:var(--navy-2);line-height:1;white-space:nowrap;
+}
+.logo-mark sup{font-size:.5em;letter-spacing:.04em;top:-.85em;position:relative}
+.logo-sub{
+  margin-top:5px;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);font-weight:500;
+}
+
+.brand-copy{position:relative;z-index:2;max-width:520px}
+.eyebrow{
+  font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);margin-bottom:18px;
+}
+.brand-copy h1{
+  font-size:clamp(30px,3.6vw,45px);line-height:1.08;font-weight:800;
+  letter-spacing:-.022em;color:#fff;margin-bottom:20px;
+}
+.brand-copy h1 em{color:var(--orange);font-style:normal}
+.brand-copy p{
+  font-size:15px;line-height:1.62;color:rgba(255,255,255,.62);
+  font-weight:300;max-width:430px;
+}
+.stats{
+  position:relative;z-index:2;display:flex;gap:0;margin-top:38px;flex-wrap:wrap;
+}
+.stat{padding-right:30px;margin-right:30px;border-right:1px solid rgba(255,255,255,.14)}
+.stat:last-child{border-right:0;margin-right:0;padding-right:0}
+.stat b{display:block;font-size:23px;font-weight:700;color:var(--orange);letter-spacing:-.01em}
+.stat span{display:block;margin-top:5px;font-size:11.5px;color:rgba(255,255,255,.45);font-weight:400}
+
+/* ══ RIGHT / FORM ══ */
+.pane{display:flex;align-items:center;justify-content:center;padding:48px 40px;background:var(--bg)}
+.form-wrap{width:100%;max-width:372px}
+.form-wrap h2{font-size:29px;font-weight:700;letter-spacing:-.02em;margin-bottom:9px}
+.lede{font-size:13.5px;color:var(--muted);margin-bottom:30px}
+
+.field{margin-bottom:18px}
+.field label{
+  display:block;font-size:10.5px;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:#5A6478;margin-bottom:8px;
+}
+.control{position:relative;display:flex;align-items:center}
+.control svg.lead{
+  position:absolute;left:14px;width:16px;height:16px;color:var(--muted-2);
+  pointer-events:none;
+}
+.control input{
+  width:100%;height:46px;padding:0 14px 0 42px;font:inherit;font-size:14px;
+  color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:9px;
+  outline:none;transition:border-color .16s,box-shadow .16s;
+}
+.control input::placeholder{color:#AEB5C1}
+.control input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(242,106,27,.13)}
+.control input:-webkit-autofill{-webkit-box-shadow:0 0 0 40px #EDF2FC inset;-webkit-text-fill-color:var(--ink)}
+.peek{
+  position:absolute;right:6px;display:grid;place-items:center;width:34px;height:34px;
+  background:none;border:0;cursor:pointer;color:var(--muted-2);border-radius:7px;
+}
+.peek:hover{color:var(--ink);background:var(--line-2)}
+.peek svg{width:17px;height:17px}
+.control:has(input#password) input{padding-right:44px}
+
+.row{display:flex;align-items:center;justify-content:space-between;margin:4px 0 22px}
+.check{display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none}
+.check input{position:absolute;opacity:0;width:0;height:0}
+.box{
+  width:16px;height:16px;border-radius:4px;border:1.5px solid #C3C9D4;background:#fff;
+  display:grid;place-items:center;transition:all .14s;flex:none;
+}
+.box svg{width:11px;height:11px;color:#fff;opacity:0;transform:scale(.6);transition:all .14s}
+.check input:checked + .box{background:var(--orange);border-color:var(--orange)}
+.check input:checked + .box svg{opacity:1;transform:scale(1)}
+.check input:focus-visible + .box{box-shadow:0 0 0 3px rgba(242,106,27,.2)}
+.check span{font-size:13px;color:#4B5567}
+.row a{font-size:13px;font-weight:500}
+
+.btn{
+  width:100%;height:48px;display:flex;align-items:center;justify-content:center;gap:9px;
+  background:var(--navy);color:#fff;border:0;border-radius:9px;cursor:pointer;
+  font:inherit;font-size:14.5px;font-weight:600;letter-spacing:.005em;
+  transition:background .16s,transform .1s,box-shadow .16s;
+}
+.btn:hover:not(:disabled){background:var(--navy-2);box-shadow:0 8px 20px rgba(27,43,74,.24)}
+.btn:active:not(:disabled){transform:translateY(1px)}
+.btn:disabled{opacity:.62;cursor:not-allowed}
+.btn .arrow{transition:transform .18s}
+.btn:hover:not(:disabled) .arrow{transform:translateX(3px)}
+.spinner{
+  width:15px;height:15px;border:2px solid rgba(255,255,255,.32);border-top-color:#fff;
+  border-radius:50%;animation:spin .7s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.alert{
+  display:none;align-items:center;gap:9px;margin-bottom:16px;padding:11px 13px;
+  background:#FDECEC;border:1px solid #F6C9C9;border-radius:8px;
+  font-size:12.5px;color:#B42318;line-height:1.4;
+}
+.alert.on{display:flex}
+.alert svg{width:15px;height:15px;flex:none}
+@keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(3px)}30%,50%,70%{transform:translateX(-5px)}40%,60%{transform:translateX(5px)}}
+.shake{animation:shake .42s cubic-bezier(.36,.07,.19,.97)}
+
+.foot{margin-top:26px;text-align:center;font-size:11.5px;line-height:1.85;color:var(--muted-2)}
+
+/* ══ SUPPORT MODAL ══ */
+.backdrop{
+  position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;
+  padding:24px;background:rgba(16,27,47,.55);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+}
+.backdrop.on{display:flex;animation:fadeIn .16s ease-out}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.modal{
+  width:100%;max-width:428px;max-height:88vh;overflow-y:auto;background:#fff;
+  border-radius:14px;padding:26px 26px 20px;box-shadow:0 24px 60px rgba(9,17,32,.32);
+  animation:popIn .2s cubic-bezier(.2,.8,.3,1);position:relative;
+}
+.modal h3{font-size:18px;font-weight:700;letter-spacing:-.01em}
+.modal .lede{font-size:12.5px;margin:6px 0 20px}
+.close{
+  position:absolute;top:18px;right:18px;width:28px;height:28px;border:0;background:none;
+  cursor:pointer;color:var(--muted-2);border-radius:7px;display:grid;place-items:center;
+}
+.close:hover{background:var(--line-2);color:var(--ink)}
+.close svg{width:15px;height:15px}
+.group{
+  font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--muted-2);margin:14px 0 6px;
+}
+.group:first-of-type{margin-top:0}
+.person{
+  display:flex;align-items:center;gap:13px;padding:9px 10px;margin:0 -10px;
+  border-radius:10px;transition:background .14s;text-decoration:none;color:inherit;
+}
+.person:hover{background:#F7F8FA;text-decoration:none}
+.av{
+  width:34px;height:34px;flex:none;border-radius:50%;background:var(--orange-soft);
+  color:var(--orange-2);display:grid;place-items:center;
+  font-size:11.5px;font-weight:700;letter-spacing:.02em;
+}
+.who{flex:1;min-width:0}
+.who b{display:block;font-size:13.5px;font-weight:600;letter-spacing:-.005em}
+.who span{display:block;font-size:11.5px;color:var(--muted);margin-top:2px}
+.tel{font-size:13px;font-weight:600;color:var(--orange);white-space:nowrap}
+.modal hr{border:0;border-top:1px solid var(--line-2);margin:16px 0 13px}
+.modal .mailrow{text-align:center;font-size:12px;color:var(--muted-2);padding-bottom:4px}
+
+/* ══ RESPONSIVE ══ */
+@media (max-width:980px){
+  .shell{grid-template-columns:1fr;grid-template-rows:auto 1fr}
+  .brand{padding:26px 28px 34px;min-height:auto}
+  .globe{width:min(62vw,420px);top:52%;left:78%;opacity:.5}
+  .brand-copy h1{font-size:30px}
+  .brand-copy p{display:none}
+  .stats{margin-top:24px}
+  .stat b{font-size:19px}
+  .pane{padding:38px 24px 48px}
+}
+@media (max-width:520px){
+  .brand{padding:22px 20px 28px}
+  .logo-mark{font-size:18px}
+  .brand-copy h1{font-size:25px;margin-bottom:0}
+  .eyebrow{font-size:9.5px;margin-bottom:12px}
+  .stat{padding-right:16px;margin-right:16px}
+  .stat b{font-size:17px}
+  .stat span{font-size:10px}
+  .globe{display:none}
+  .pane{padding:30px 20px 40px}
+  .form-wrap h2{font-size:25px}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- ══════════ BRAND PANEL ══════════ -->
+  <section class="brand">
+    <div class="globe" aria-hidden="true">
+      <svg viewBox="0 0 600 600" fill="none">
+        <g stroke="rgba(255,255,255,.20)" stroke-width="1">
+          <circle cx="300" cy="300" r="205"/>
+          <ellipse cx="300" cy="300" rx="68" ry="205"/>
+          <ellipse cx="300" cy="300" rx="138" ry="205"/>
+          <ellipse cx="300" cy="300" rx="205" ry="68"/>
+          <ellipse cx="300" cy="300" rx="205" ry="138"/>
+          <line x1="300" y1="95" x2="300" y2="505"/>
+          <line x1="95" y1="300" x2="505" y2="300"/>
+        </g>
+        <g class="orbit-spin">
+          <ellipse cx="300" cy="300" rx="285" ry="118" transform="rotate(-24 300 300)"
+                   stroke="rgba(242,106,27,.55)" stroke-width="1.4"/>
+          <g transform="translate(122,196) rotate(-24)" stroke="rgba(242,106,27,.85)" stroke-width="1.6">
+            <rect x="-6" y="-7" width="13" height="14" rx="1.5"/>
+            <rect x="-24" y="-4.5" width="15" height="9" rx="1"/>
+            <rect x="10" y="-4.5" width="15" height="9" rx="1"/>
+            <line x1="-9" y1="0" x2="-6" y2="0"/>
+            <line x1="7" y1="0" x2="10" y2="0"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="logo-card">
+      <div class="logo-mark">G[EO]SPATIAL<sup>AI</sup></div>
+      <div class="logo-sub">An Uzma Company</div>
+    </div>
+
+    <div>
+      <div class="brand-copy">
+        <div class="eyebrow">Building Footprint Intelligence</div>
+        <h1>Mapping the Future<br>of <em>Malaysian Land</em></h1>
+        <p>AI-powered geospatial analysis for building footprint extraction, land use classification and spatial decision support.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>329K+</b><span>Parcels analysed</span></div>
+        <div class="stat"><b>98.4%</b><span>Classification accuracy</span></div>
+        <div class="stat"><b>UZMA-Sat</b><span>Imagery basemap</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ SIGN IN PANEL ══════════ -->
+  <section class="pane">
+    <div class="form-wrap">
+      <h2>Welcome back</h2>
+      <p class="lede">Sign in to access the Geospatial AI Dashboard.</p>
+
+      <div class="alert" id="alert" role="alert" aria-live="polite">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span id="alertText"></span>
+      </div>
+
+      <form id="loginForm" novalidate autocomplete="on">
+        <div class="field">
+          <label for="email">Email</label>
+          <div class="control">
+            <svg class="lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/>
+            </svg>
+            <input type="email" id="email" name="email" placeholder="you@uzmagroup.com"
+                   autocomplete="username" spellcheck="false" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="control">
+            <svg class="lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+            </svg>
+            <input type="password" id="password" name="password" placeholder="••••••••"
+                   autocomplete="current-password" required>
+            <button type="button" class="peek" id="peek" aria-label="Show password">
+              <svg id="peekIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="row">
+          <label class="check">
+            <input type="checkbox" id="remember" checked>
+            <span class="box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>
+            </span>
+            <span>Remember me</span>
+          </label>
+          <a href="#" data-support>Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn" id="submitBtn">
+          <span id="btnLabel">Sign In</span><span class="arrow">→</span>
+        </button>
+      </form>
+
+      <p class="foot">
+        Access is restricted to authorised UZMA personnel.<br>
+        Having trouble? Contact <a href="#" data-support>Geospatial AI Support</a>
+      </p>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════ SUPPORT MODAL ══════════ -->
+<div class="backdrop" id="support" role="dialog" aria-modal="true" aria-labelledby="supportTitle">
+  <div class="modal">
+    <button class="close" id="supportClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <h3 id="supportTitle">Geospatial AI Support</h3>
+    <p class="lede">Reach the right person directly — tap a name to call.</p>
+
+    <div class="group">Business Development</div>
+    <a class="person" href="tel:+60176670864">
+      <span class="av">AS</span>
+      <span class="who"><b>Ather Sulaiman</b><span>Drone Ops · InSAR · Agri</span></span>
+      <span class="tel">017-6670864</span>
+    </a>
+    <a class="person" href="tel:+60193642448">
+      <span class="av">MD</span>
+      <span class="who"><b>Mohammad Danial Aqmar</b><span>Uzma Space &amp; Defence</span></span>
+      <span class="tel">019-3642448</span>
+    </a>
+    <a class="person" href="tel:+601156770921">
+      <span class="av">AA</span>
+      <span class="who"><b>Arief Syazni Azhar</b><span>Urban Planning</span></span>
+      <span class="tel">011-56770921</span>
+    </a>
+
+    <div class="group">Solution Architect</div>
+    <a class="person" href="tel:+60175255512">
+      <span class="av">MH</span>
+      <span class="who"><b>Muhammad Hanis Rashidan</b><span>Solution Architect</span></span>
+      <span class="tel">017-5255512</span>
+    </a>
+
+    <hr>
+    <div class="mailrow">Or email <a href="mailto:geospatial.ai@uzmagroup.com">geospatial.ai@uzmagroup.com</a></div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ── digest ─────────────────────────────────────────────── */
+function _d(a){
+  function r(v,n){return (v>>>n)|(v<<(32-n))}
+  var P=Math.pow,M=P(2,32),i,j,o='',w=[],L=a.length*8;
+  var h=_d.h=_d.h||[],k=_d.k=_d.k||[],p=k.length,c={};
+  for(var q=2;p<64;q++){
+    if(!c[q]){
+      for(i=0;i<313;i+=q){c[i]=q}
+      h[p]=(P(q,.5)*M)|0; k[p++]=(P(q,1/3)*M)|0;
+    }
+  }
+  a+='\x80'; while(a.length%64-56)a+='\x00';
+  for(i=0;i<a.length;i++){j=a.charCodeAt(i); if(j>>8)return; w[i>>2]|=j<<((3-i)%4)*8}
+  w[w.length]=((L/M)|0); w[w.length]=L;
+  for(j=0;j<w.length;){
+    var s=w.slice(j,j+=16),H=h; h=h.slice(0,8);
+    for(i=0;i<64;i++){
+      var x=s[i-15],y=s[i-2],A=h[0],E=h[4];
+      var t1=h[7]+(r(E,6)^r(E,11)^r(E,25))+((E&h[5])^((~E)&h[6]))+k[i]
+        +(s[i]=(i<16)?s[i]:(s[i-16]+(r(x,7)^r(x,18)^(x>>>3))+s[i-7]+(r(y,17)^r(y,19)^(y>>>10)))|0);
+      var t2=(r(A,2)^r(A,13)^r(A,22))+((A&h[1])^(A&h[2])^(h[1]&h[2]));
+      h=[(t1+t2)|0].concat(h); h[4]=(h[4]+t1)|0;
+    }
+    for(i=0;i<8;i++){h[i]=(h[i]+H[i])|0}
+  }
+  for(i=0;i<8;i++){for(j=3;j+1;j--){var b=(h[i]>>(j*8))&255;o+=((b<16)?0:'')+b.toString(16)}}
+  return o;
+}
+
+var _s='UZMA::GEOAI::BEZ::v1', _n=4096;
+var _a=["e109ce6e502199de","3d8302c284b44da9","98b3c6a8b37ddfa8","474da15bae600100"];
+var _b=["ab81835670fe5817","9c5708e4fb1016dd","d4228d83a9569c74","3448b9ef7e449ba8"];
+function _u(x){return x.slice().reverse().map(function(t){return t.split('').reverse().join('')}).join('')}
+function _f(u,p){
+  var v=_d(_s+'|'+String(u).trim().toLowerCase()+'|'+String(p));
+  for(var i=0;i<_n;i++){v=_d(v+'|'+i)}
+  return v;
+}
+var K={tok:'uzma.geoai.tok',exp:'uzma.geoai.exp',lock:'uzma.geoai.lk',fail:'uzma.geoai.fc'};
+
+/* already signed in? go straight through */
+try{
+  var st=[sessionStorage,localStorage];
+  for(var q=0;q<2;q++){
+    var t=st[q].getItem(K.tok),e=+(st[q].getItem(K.exp)||0);
+    if(t===_u(_b)&&e>Date.now()){location.replace('index.html');return}
+    if(t&&e<=Date.now()){st[q].removeItem(K.tok);st[q].removeItem(K.exp)}
+  }
+}catch(_){}
+
+/* ── ui refs ────────────────────────────────────────────── */
+var form=document.getElementById('loginForm'),
+    email=document.getElementById('email'),
+    pass=document.getElementById('password'),
+    remember=document.getElementById('remember'),
+    btn=document.getElementById('submitBtn'),
+    btnLabel=document.getElementById('btnLabel'),
+    alertBox=document.getElementById('alert'),
+    alertText=document.getElementById('alertText'),
+    wrap=document.querySelector('.form-wrap');
+
+function warn(msg){
+  alertText.textContent=msg; alertBox.classList.add('on');
+  wrap.classList.remove('shake'); void wrap.offsetWidth; wrap.classList.add('shake');
+}
+function clearWarn(){alertBox.classList.remove('on')}
+email.addEventListener('input',clearWarn);
+pass.addEventListener('input',clearWarn);
+
+/* show / hide password */
+var eyeOn='<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
+    eyeOff='<path d="M10.6 6.2A9.9 9.9 0 0 1 12 6c6.4 0 10 6 10 6a17 17 0 0 1-3.1 3.9M6.6 6.7A17 17 0 0 0 2 12s3.6 7 10 7a9.8 9.8 0 0 0 4.3-1"/><path d="M3 3l18 18"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>';
+document.getElementById('peek').addEventListener('click',function(){
+  var on=pass.type==='password';
+  pass.type=on?'text':'password';
+  document.getElementById('peekIcon').innerHTML=on?eyeOff:eyeOn;
+  this.setAttribute('aria-label',on?'Hide password':'Show password');
+  pass.focus();
+});
+
+/* throttle */
+function lockedFor(){
+  try{var u=+(localStorage.getItem(K.lock)||0);return Math.max(0,Math.ceil((u-Date.now())/1000))}catch(_){return 0}
+}
+function noteFail(){
+  try{
+    var n=(+(localStorage.getItem(K.fail)||0))+1;
+    localStorage.setItem(K.fail,n);
+    if(n>=5){localStorage.setItem(K.lock,Date.now()+30000);localStorage.setItem(K.fail,0);return true}
+  }catch(_){}
+  return false;
+}
+
+/* ── submit ─────────────────────────────────────────────── */
+var busy=false;
+form.addEventListener('submit',function(ev){
+  ev.preventDefault();
+  if(busy)return;
+
+  var wait=lockedFor();
+  if(wait){warn('Too many attempts. Try again in '+wait+'s.');return}
+
+  var u=email.value.trim(), p=pass.value;
+  if(!u||!p){warn('Please enter both your email and password.');return}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(u)){warn('Please enter a valid email address.');return}
+
+  busy=true; clearWarn();
+  btn.disabled=true;
+  btnLabel.textContent='Verifying';
+  btn.querySelector('.arrow').outerHTML='<span class="spinner arrow"></span>';
+
+  setTimeout(function(){
+    var ok=false;
+    try{ok=_f(u,p)===_u(_a)}catch(_){ok=false}
+
+    if(ok){
+      var days=remember.checked?30:0;
+      var store=remember.checked?localStorage:sessionStorage;
+      var until=Date.now()+(days?days*864e5:12*36e5);
+      try{
+        localStorage.removeItem(K.tok);localStorage.removeItem(K.exp);
+        sessionStorage.removeItem(K.tok);sessionStorage.removeItem(K.exp);
+        localStorage.removeItem(K.fail);localStorage.removeItem(K.lock);
+        store.setItem(K.tok,_u(_b)); store.setItem(K.exp,until);
+      }catch(_){warn('Browser storage is blocked — enable cookies/site data to sign in.');reset();return}
+      btnLabel.textContent='Signed in';
+      location.replace('index.html');
+      return;
+    }
+
+    var locked=noteFail();
+    warn(locked?'Too many failed attempts. Locked for 30 seconds.':'Invalid email or password. Please try again.');
+    pass.value=''; pass.focus();
+    reset();
+  },420);
+
+  function reset(){
+    busy=false; btn.disabled=false; btnLabel.textContent='Sign In';
+    var sp=btn.querySelector('.spinner'); if(sp)sp.outerHTML='<span class="arrow">→</span>';
+  }
+});
+
+/* ── support modal ──────────────────────────────────────── */
+var support=document.getElementById('support');
+function openSupport(e){if(e)e.preventDefault();support.classList.add('on');document.getElementById('supportClose').focus()}
+function closeSupport(){support.classList.remove('on')}
+Array.prototype.forEach.call(document.querySelectorAll('[data-support]'),function(el){
+  el.addEventListener('click',openSupport);
+});
+document.getElementById('supportClose').addEventListener('click',closeSupport);
+support.addEventListener('click',function(e){if(e.target===support)closeSupport()});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&support.classList.contains('on'))closeSupport()});
+if(location.hash==='#support')openSupport();
+
+email.focus();
+})();
+</script>
+</body>
+</html>

@@ -2,6 +2,33 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<script>
+/* ══ ACCESS GATE — must run before anything else ══ */
+(function(){
+  var _b=["ab81835670fe5817","9c5708e4fb1016dd","d4228d83a9569c74","3448b9ef7e449ba8"];
+  var _v=_b.slice().reverse().map(function(t){return t.split('').reverse().join('')}).join('');
+  var K={tok:'uzma.geoai.tok',exp:'uzma.geoai.exp'},ok=false;
+  try{
+    var st=[sessionStorage,localStorage];
+    for(var i=0;i<2;i++){
+      var t=st[i].getItem(K.tok),e=+(st[i].getItem(K.exp)||0);
+      if(t&&e<=Date.now()){st[i].removeItem(K.tok);st[i].removeItem(K.exp);continue}
+      if(t===_v&&e>Date.now())ok=true;
+    }
+  }catch(_){ok=false}
+  if(!ok){
+    document.documentElement.style.display='none';
+    location.replace('login.html');
+  }
+  window.__uzmaSignOut=function(){
+    try{
+      sessionStorage.removeItem(K.tok);sessionStorage.removeItem(K.exp);
+      localStorage.removeItem(K.tok);localStorage.removeItem(K.exp);
+    }catch(_){}
+    location.replace('login.html');
+  };
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MY–TH BEZ · NCER</title>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
