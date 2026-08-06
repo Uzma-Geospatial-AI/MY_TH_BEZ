@@ -121,11 +121,14 @@ body::after{
 .kl{font-size:0.65rem;color:var(--muted);margin-top:4px;line-height:1.35}
 
 .vendor{margin-top:auto;padding-top:2.1rem;position:relative;z-index:1}
-.vendor::before{
-  content:'';display:block;height:1px;width:100%;margin-bottom:1.25rem;
-  background:linear-gradient(90deg,var(--border),transparent);
+.vendor-badge{
+  display:inline-block;background:#fff;border:1px solid var(--border);
+  border-radius:16px;padding:15px 22px;
+  box-shadow:0 3px 16px rgba(26,46,26,0.07);
+  transition:border-color .3s,box-shadow .3s;
 }
-.vendor-logo{display:block;width:230px;max-width:80%;height:auto}
+.vendor-badge:hover{border-color:var(--gold);box-shadow:0 8px 24px rgba(184,120,0,0.16)}
+.vendor-logo{display:block;width:196px;max-width:100%;height:auto}
 
 /* ══ FORM SIDE ══ */
 .pane{padding:3.1rem 3rem 2.7rem;display:flex;flex-direction:column;justify-content:center;background:#fff;min-width:0}
@@ -275,8 +278,8 @@ body::after{
   .rule{margin:1.4rem 0 1.2rem}
   .kgrid{grid-template-columns:1fr 1fr;margin-top:1.35rem}
   .vendor{margin-top:1.7rem;padding-top:0}
-  .vendor::before{margin-bottom:1.1rem}
-  .vendor-logo{width:200px}
+  .vendor-badge{padding:13px 18px;border-radius:14px}
+  .vendor-logo{width:178px}
   .pane{padding:2.1rem 1.8rem 2.4rem}
 }
 @media (max-width:430px){
@@ -287,7 +290,7 @@ body::after{
   .pane h2{font-size:1.7rem}
   .kn{font-size:1.4rem}
   .kc{padding:0.75rem 0.85rem}
-  .vendor-logo{width:175px}
+  .vendor-logo{width:158px}
 }
 </style>
 </head>
@@ -330,8 +333,10 @@ body::after{
     </div>
 
     <div class="vendor">
-      <img class="vendor-logo" src="geospatial-ai-logo.png" width="874" height="193"
-           alt="Geospatial AI — An Uzma Company">
+      <div class="vendor-badge">
+        <img class="vendor-logo" src="geospatial-ai-logo.png" width="874" height="193"
+             alt="Geospatial AI — An Uzma Company">
+      </div>
     </div>
   </section>
 

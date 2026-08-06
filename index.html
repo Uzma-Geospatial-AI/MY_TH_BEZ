@@ -151,6 +151,24 @@ body::before{
 .lp-pane{display:none;flex:1;flex-direction:column;overflow:hidden}
 .lp-pane.on{display:flex;animation:slideIn 0.32s ease both}
 
+/* Panel footer — vendor mark */
+.lp-foot{
+  flex-shrink:0;display:flex;align-items:center;gap:11px;
+  padding:0.6rem 0.9rem;border-top:1px solid var(--border);
+  background:linear-gradient(180deg,transparent,rgba(184,120,0,0.06));
+}
+.lp-foot .lpf-lb{
+  font-size:0.5rem;letter-spacing:2.2px;text-transform:uppercase;
+  color:var(--muted);flex-shrink:0;line-height:1.35;
+}
+.lp-foot .lpf-badge{
+  background:#fff;border:1px solid var(--border);border-radius:10px;
+  padding:6px 10px;box-shadow:0 2px 8px rgba(0,0,0,0.05);
+  transition:border-color 0.3s,box-shadow 0.3s;
+}
+.lp-foot .lpf-badge:hover{border-color:var(--gold);box-shadow:0 5px 16px rgba(184,120,0,0.16)}
+.lp-foot img{display:block;width:122px;height:auto}
+
 /* Panel header */
 .lp-hd{
   padding:1rem 1.2rem 0.8rem;border-bottom:1px solid var(--border);
@@ -741,6 +759,15 @@ body::before{
         <div style="font-size:0.51rem;color:var(--muted);padding:2px 0 10px;text-align:center">
           * 2025: Jan–Jul only &nbsp;·&nbsp; Source: JIM / NCIA
         </div>
+      </div>
+    </div>
+
+    <!-- PANEL FOOTER — vendor mark -->
+    <div class="lp-foot">
+      <div class="lpf-lb">Powered<br>by</div>
+      <div class="lpf-badge">
+        <img src="geospatial-ai-logo.png" width="874" height="193"
+             alt="Geospatial AI — An Uzma Company">
       </div>
     </div>
 
